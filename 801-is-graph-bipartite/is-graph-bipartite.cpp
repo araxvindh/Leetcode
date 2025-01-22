@@ -1,45 +1,35 @@
 class Solution {
 
 private:
-    bool check(vector<vector<int>>&graph , vector<int>&color,int V,int start)
+    bool dfs(vector<vector<int>>&graph ,vector<int>&color ,int V ,int start,int col)
     {
-        queue<int>q;
-        q.push(start);
-        color[start]=0;
+        color[start]=col;
 
-        while(!q.empty())
+        for(auto it : graph[start])
         {
-            int node=q.front();
-            q.pop();
-
-            for(auto it : graph[node])
+            if(color[it]==-1)
             {
-                
-                if(color[it]==-1)
-                {
-                    color[it]=!color[node];
-                    q.push(it);
-                }
-
-                else if(color[it]==color[node])
-                {
-                    return false;
-                }
+                if(dfs(graph,color,V,it,!col)==false) return false;
+            }
+            else if(color[it]==color[start])
+            {
+                return false;
             }
         }
+
         return true;
     }
 
 public:
     bool isBipartite(vector<vector<int>>& graph) {
+        // dfs approch
         int V=graph.size();
         vector<int>color(V,-1);
-
         for(int i=0;i<V;i++)
         {
             if(color[i]==-1)
             {
-                if(check(graph,color,V,i)==false) return false;
+                if(dfs(graph,color,V,i,0)==false) return false;
             }
         }
         return true;
