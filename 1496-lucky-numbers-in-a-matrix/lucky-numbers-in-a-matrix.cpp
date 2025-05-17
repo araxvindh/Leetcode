@@ -1,34 +1,50 @@
 class Solution {
 public:
     vector<int> luckyNumbers(vector<vector<int>>& matrix) {
-        unordered_map<int,int> mpp;
-        for (int i = 0; i < matrix.size(); i++) {
-            int size = matrix[i].size();
-            int mini = INT_MAX;
-            int colIndex = -1;
-            for (int j = 0; j < size; j++) {
-                if (matrix[i][j] < mini) {
-                    mini = matrix[i][j];
-                    colIndex = j;
-                }
+        int n=matrix.size();
+        int m=matrix[0].size();
+
+        vector<int>mR;
+        vector<int>mC;
+
+        for(int i=0;i<n;i++)
+        {
+            int mini=INT_MAX;
+            for(int j=0;j<m;j++)
+            {
+                mini=min(mini,matrix[i][j]);
             }
-            mpp[mini] = colIndex;
+            mR.push_back(mini);
         }
 
-        vector<int> ans;
-        int cols = matrix[0].size();
-        int rows = matrix.size();
 
-        for (auto it : mpp) {
-            int element = it.first;
-            int index = it.second;
-            int maxi = INT_MIN;
-            for (int row = 0; row < rows; row++) {
-                maxi = max(matrix[row][index], maxi);
+        
+        for(int j=0;j<m;j++)
+        {
+            int maxi=INT_MIN;
+            for(int i=0;i<n;i++)
+            {
+                maxi=max(maxi,matrix[i][j]);
             }
-            if (maxi == element) ans.push_back(element);
+            mC.push_back(maxi);
+        }
+
+        vector<int>ans;
+
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(matrix[i][j]==mR[i] && matrix[i][j]==mC[j])
+                {
+                    ans.push_back(matrix[i][j]);
+                }
+            }
         }
 
         return ans;
+        
     }
+
+
 };
